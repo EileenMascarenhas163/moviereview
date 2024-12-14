@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Borel&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+
+.navbar{
+   position: absolute;
+   width: 100%;
+   height: 42px;
+   top: 30px;
+   display: flex;
+   align-items: center;
+}
+
+.navbar h2{
+   position: absolute;
+   left: 20%;
+   top: 7.14%;
+   bottom: 7.14%;
+   font-family: 'Borel', cursive;
+   font-weight: 700;
+   font-size: 24px;
+   line-height: 36px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   cursor: pointer;
+   color: #000000;
+}
+
+.nav-menu{
+   position: absolute;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   right: 20.7%;
+   top: 7.14%;
+   bottom: 23.81%;
+   text-align: right;
+   gap: 30px;
+   color: #000000;
+}
+
+.nav-item{
+    list-style: none;
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 21px;
+    text-align: right;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+}
+
+.nav-img{
+    list-style: none;
+    cursor: pointer;
+}
+
+.nav-img img{
+    width: 50px;
+    height: 40px;
+    object-fit: contain;
+}

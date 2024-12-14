@@ -1,6 +1,4 @@
-import React from "react";
-import "./Home.css";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Hero from "../../components/Hero/Hero";
 import Movies from "../../components/Movies/Movies";
 import Footer from "../../components/Footer/Footer";
@@ -24,14 +22,15 @@ const Home = () => {
     // Call the fetchMovies function to retrieve the movies
     fetchMovies();
   }, [getAllMovies]);
+
   return (
-    <>
-      <div className="home">
-        <Hero />
-      <Movies movies={movies} />
-        <Footer />
+    <div className="bg-black text-white min-h-screen">
+      <Hero />
+      <div className="py-8 bg-yellow-500">
+        <Movies movies={movies} />
       </div>
-    </>
+      <Footer />
+    </div>
   );
 };
 

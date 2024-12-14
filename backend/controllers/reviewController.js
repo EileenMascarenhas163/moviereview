@@ -1,60 +1,34 @@
-import asyncHandler from "express-async-handler";
-import Movie from "../models/movieModel.js";
-import Review from "../models/reviewModel.js";
-
-// @desc    Create movie review
-// route    POST /api/movies/review/:id
-// access   private
+import asyncHandler from 'express-async-handler';
+import Review from '../models/reviewModel.js';
+import Movie from '../models/movieModel.js';
 
 const createReview = asyncHandler(async (req, res) => {
-  const movieId = req.params.id;
-  const { user, reviewText, rating } = req.body;
+  const { movieId } = req.params; // Get movieId from URL parameters
+  const { rating, comment } = req.body; // Get review data from request body
 
-  try {
-    const movie = await Movie.findById(movieId);
+  // Find the movie by ID
+  const movie = await Movie.findById(movieId);
 
-    if (!movie) {
-      return res.status(404).json({
-        message: "Movie not found",
-      });
-    }
-
-    const newReview = new Review({
-      user,
-      reviewText,
-      rating,
-    });
-
-    movie.reviews.push(newReview);
-
-    await movie.save();
-    res.status(201).json(newReview);
-  } catch (error) {
-    res.status(404);
-    throw new Error("Server error : " + error.message);
+  if (!movie) {
+    return res.status(404).json({ message: 'Movie not found' });
   }
+
+  // Create a new review
+  const review = new Review({
+    movie: movieId,
+    user: req.user._id, // Assuming you have user authentication
+    rating,
+    comment,
+  });
+
+  // Save the review
+  const createdReview = await review.save();
+
+  // Add the review to the movie's reviews array
+  movie.reviews.push(createdReview._id);
+  await movie.save();
+
+  res.status(201).json({ message: 'Review created successfully', review: createdReview });
 });
 
-// @desc    Get movie review
-// route    GET /api/movies/review/:id
-// access   private
-
-const getReview = asyncHandler(async (req, res) => {
-  const movieId = req.params.id;
-  try {
-    const movie = await Movie.findById(movieId).populate("reviews");
-
-    if (!movie) {
-      return res.status(404).json({
-        message: "Movie not found",
-      });
-    }
-
-    res.status(200).json(movie.reviews);
-  } catch (error) {
-    res.status(404);
-    throw new Error("Server error : " + error.message);
-  }
-});
-
-export { createReview, getReview };
+export { createReview };

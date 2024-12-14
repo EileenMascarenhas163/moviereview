@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../../slices/userApiSlice";
 import { logout } from "../../slices/authSlice";
 import { Link } from "react-router-dom";
-import "./Navbar.css";
 import profilePic from "../../img/profile.png";
 
 const Navbar = () => {
@@ -23,52 +22,60 @@ const Navbar = () => {
       console.log(err);
     }
   };
-  return (
-    <>
-      <div className="navbar">
-        <Link className="link" to="/">
-          <h2>REVIEWiT</h2>
-        </Link>
 
-        <ul className="nav-menu">
-          <li className="nav-item">
-            <Link className="link" to="/">
-              HOME
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="link" to="/about">
-              ABOUT
-            </Link>
-          </li>
-          {userInfo ? (
-            <>
-              <li className="nav-item" onClick={handleLogOut}>
+  return (
+    <div className="bg-black text-yellow-500 flex justify-between items-center p-5 shadow-lg">
+      <Link className="text-2xl font-bold hover:text-yellow-300" to="/">
+        REVIEWiT
+      </Link>
+
+      <ul className="flex space-x-6">
+        <li>
+          <Link className="hover:text-yellow-300" to="/">
+            HOME
+          </Link>
+        </li>
+        <li>
+          <Link className="hover:text-yellow-300" to="/addmoview">
+            ADDMOVIE
+          </Link>
+        </li>
+        {userInfo ? (
+          <>
+            <li>
+              <button
+                onClick={handleLogOut}
+                className="hover:text-yellow-300"
+              >
                 LOGOUT
-              </li>
-              <li className="nav-img">
-                <Link to="/profile">
-                  <img src={profilePic} alt="" />
-                </Link>
-              </li>
-            </>
-          ) : (
-            <>
-              <li className="nav-item">
-                <Link className="link" to="/login">
-                  LOGIN
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="link" to="/register">
-                  REGISTER
-                </Link>
-              </li>
-            </>
-          )}
-        </ul>
-      </div>
-    </>
+              </button>
+            </li>
+            <li>
+              <Link to="/profile">
+                <img
+                  src={profilePic}
+                  alt="Profile"
+                  className="w-8 h-8 rounded-full border border-yellow-500"
+                />
+              </Link>
+            </li>
+          </>
+        ) : (
+          <>
+            <li>
+              <Link className="hover:text-yellow-300" to="/login">
+                LOGIN
+              </Link>
+            </li>
+            <li>
+              <Link className="hover:text-yellow-300" to="/register">
+                REGISTER
+              </Link>
+            </li>
+          </>
+        )}
+      </ul>
+    </div>
   );
 };
 

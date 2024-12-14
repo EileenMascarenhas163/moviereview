@@ -1,13 +1,11 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useRegisterMutation } from "../../slices/userApiSlice";
 import { setCredentials } from "../../slices/authSlice";
-import "./Register.css";
+import { toast } from "react-toastify";
 import registerImg from "../../img/register-img.jpg";
 import Footer from "../../components/Footer/Footer";
-import { toast } from "react-toastify";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -30,7 +28,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      toast.error("Password is incorrect");
+      toast.error("Passwords do not match");
     } else {
       try {
         const res = await register({ name, email, password }).unwrap();
@@ -43,66 +41,105 @@ const Register = () => {
 
   return (
     <>
-      <div className="register-form-container">
-        <div className="register-picture">
-          <img src={registerImg} alt="register-img" />
+      <div className="flex min-h-screen bg-black">
+        {/* Left Image Section */}
+        <div className="hidden lg:block lg:w-1/2 relative">
+          <img
+            src={registerImg}
+            alt="register-img"
+            className="w-full h-full object-cover"
+          />
         </div>
-        <div className="container">
-          <div className="screen">
-            <div className="screen__content">
-              <form className="register" onSubmit={handleSubmit}>
-                <div className="register__field">
-                  <i className="register__icon fa fa-user"></i>
+
+        {/* Register Form Section */}
+        <div className="flex flex-col items-center justify-center w-full lg:w-1/2 py-12 px-6 bg-yellow-500">
+          <div className="max-w-sm w-full bg-yellow-100 rounded-lg shadow-lg p-8">
+            <h2 className="text-2xl font-bold text-center text-black mb-6">Register</h2>
+            <form onSubmit={handleSubmit}>
+              {/* Name Field */}
+              <div className="mb-4">
+                <label className="block text-black text-sm font-bold mb-2" htmlFor="name">
+                  Name
+                </label>
+                <div className="flex items-center border border-black rounded-md">
+                  <i className="fa fa-user text-black p-3"></i>
                   <input
                     type="text"
-                    className="register__input"
-                    placeholder="Name"
+                    id="name"
+                    className="w-full p-3 text-black bg-transparent outline-none"
+                    placeholder="Enter your name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    required
                   />
                 </div>
-                <div className="register__field">
-                  <i className="register__icon fa fa-envelope"></i>
+              </div>
+
+              {/* Email Field */}
+              <div className="mb-4">
+                <label className="block text-black text-sm font-bold mb-2" htmlFor="email">
+                  Email
+                </label>
+                <div className="flex items-center border border-black rounded-md">
+                  <i className="fa fa-envelope text-black p-3"></i>
                   <input
                     type="email"
-                    className="register__input"
-                    placeholder="Email"
+                    id="email"
+                    className="w-full p-3 text-black bg-transparent outline-none"
+                    placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    required
                   />
                 </div>
-                <div className="register__field">
-                  <i className="register__icon fa fa-lock"></i>
+              </div>
+
+              {/* Password Field */}
+              <div className="mb-4">
+                <label className="block text-black text-sm font-bold mb-2" htmlFor="password">
+                  Password
+                </label>
+                <div className="flex items-center border border-black rounded-md">
+                  <i className="fa fa-lock text-black p-3"></i>
                   <input
                     type="password"
-                    className="register__input"
-                    placeholder="Password"
+                    id="password"
+                    className="w-full p-3 text-black bg-transparent outline-none"
+                    placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    required
                   />
                 </div>
-                <div className="register__field">
-                  <i className="register__icon fa fa-lock"></i>
+              </div>
+
+              {/* Confirm Password Field */}
+              <div className="mb-6">
+                <label className="block text-black text-sm font-bold mb-2" htmlFor="confirmPassword">
+                  Confirm Password
+                </label>
+                <div className="flex items-center border border-black rounded-md">
+                  <i className="fa fa-lock text-black p-3"></i>
                   <input
                     type="password"
-                    className="register__input"
-                    placeholder="Confirm Password"
+                    id="confirmPassword"
+                    className="w-full p-3 text-black bg-transparent outline-none"
+                    placeholder="Confirm your password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
                   />
                 </div>
-                <button className="button register__submit" type="submit">
-                  <span className="button__text">Register</span>
-                  <i className="button__icon fa fa-chevron-right"></i>
-                </button>
-              </form>
-            </div>
-            <div className="screen__background">
-              <span className="screen__background__shape screen__background__shape4"></span>
-              <span className="screen__background__shape screen__background__shape3"></span>
-              <span className="screen__background__shape screen__background__shape2"></span>
-              <span className="screen__background__shape screen__background__shape1"></span>
-            </div>
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                className="w-full bg-black text-white py-3 rounded-md font-bold hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              >
+                Register
+              </button>
+            </form>
           </div>
         </div>
       </div>

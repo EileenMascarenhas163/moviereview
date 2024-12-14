@@ -1,7 +1,5 @@
-import React from "react";
-import "./ReviewForm.css";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { useState } from "react";
 import { usePostReviewMutation } from "../../slices/movieApiSlice";
 
 const ReviewForm = ({ movieId, onReviewSubmit }) => {
@@ -23,42 +21,48 @@ const ReviewForm = ({ movieId, onReviewSubmit }) => {
       setReviewText("");
       setRating("");
       onReviewSubmit(res.data);
+      window.location.reload();
     } catch (error) {
       console.error("Error creating review", error);
     }
   };
 
   return (
-    <div>
-      <div className="review-form-container">
-        <div className="container__item">
-          <form className="form" onSubmit={handleSubmit}>
-          <input
-  type="number"
-  className="form__field__one"
-  placeholder="Rating (1-10)"
-  value={rating}
-  onChange={(e) => setRating(e.target.value)}
-  min="1"
-  max="10"
-  required
-/>
+    <div className="flex justify-center items-center bg-black py-10">
+      <div className="w-full max-w-md p-6 bg-yellow-500 rounded-lg shadow-lg">
+        <form className="space-y-4" onSubmit={handleSubmit}>
+          <div>
+            <input
+              type="number"
+              className="w-full p-3 rounded-md text-black placeholder-black bg-yellow-100"
+              placeholder="Rating (1-10)"
+              value={rating}
+              onChange={(e) => setRating(e.target.value)}
+              min="1"
+              max="10"
+              required
+            />
+          </div>
 
+          <div>
             <input
               type="text"
-              className="form__field"
+              className="w-full p-3 rounded-md text-black placeholder-black bg-yellow-100"
               placeholder="Write Your Review"
               value={reviewText}
               onChange={(e) => setReviewText(e.target.value)}
             />
+          </div>
+
+          <div>
             <button
               type="submit"
-              className="btn btn--primary btn--inside uppercase"
+              className="w-full py-3 text-white font-bold bg-black hover:bg-yellow-700 rounded-md"
             >
               POST
             </button>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </div>
   );

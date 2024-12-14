@@ -1,20 +1,19 @@
 import React from "react";
-import "./Review.css";
 
 const Review = ({ review }) => {
   return (
-    <div className="review-box">
+    <div className="bg-black text-yellow-500 border border-yellow-500 p-4 rounded-lg shadow-lg">
       <div className="content">
-        <ul className="team">
-          <li className="member">
+        <ul className="">
+          <li className="">
             <div className="description">
-              <h3>{review.user}</h3>
-              <p>
+              <h3 className="text-lg font-bold">{review.user}</h3>
+              <p className="mt-2 text-yellow-300">
                 {review.reviewText}
                 <br />
-                <a>
+                <a className="text-yellow-400 flex items-center mt-2">
                   {review.rating}
-                  <i className="fa fa-star" aria-hidden="true"></i>
+                  <i className="fa fa-star ml-1" aria-hidden="true"></i>
                 </a>
               </p>
             </div>

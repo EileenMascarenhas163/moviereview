@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { usePostReviewMutation } from "../../slices/movieApiSlice";
 
 const ReviewForm = ({ movieId, onReviewSubmit }) => {
   const { userInfo } = useSelector((state) => state.auth);
   const [reviewText, setReviewText] = useState("");
   const [rating, setRating] = useState("");
-  const [postReview] = usePostReviewMutation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,10 +15,33 @@ const ReviewForm = ({ movieId, onReviewSubmit }) => {
         rating: Number(rating),
       };
 
-      const res = await postReview({ id: movieId, data: reviewData }).unwrap();
+     
+
+      // Use fetch to POST data to the API
+      const response = await fetch(
+        `http://localhost:5000/api/reviews/review/${movieId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(reviewData),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to post review");
+      }
+
+      const data = await response.json();
+
+      // Clear form fields
       setReviewText("");
       setRating("");
-      onReviewSubmit(res.data);
+
+      // Trigger callback with the new review
+      onReviewSubmit(data);
       window.location.reload();
     } catch (error) {
       console.error("Error creating review", error);

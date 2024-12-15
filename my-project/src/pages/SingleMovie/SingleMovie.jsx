@@ -8,34 +8,44 @@ import ReviewForm from "../../components/ReviewForm/ReviewForm";
 
 const SingleMovie = () => {
   const { id } = useParams();
-  const [movie, setMovie] = useState({});
+  const [movie, setMovie] = useState(null); // Start with null to handle loading state
   const { userInfo } = useSelector((state) => state.auth);
   const [isShown, setIsShown] = useState(false);
   const [reviews, setReviews] = useState([]);
-  const [submittingReview, setSubmittingReview] = useState(false);
   const [getOneMovie] = useGetOneMovieMutation();
 
+  // Fetch movie data
   useEffect(() => {
     const fetchMovieData = async () => {
       try {
         const res = await getOneMovie({ id: id });
+        console.log(res.data); // Check if reviews are populated
         setMovie(res.data);
-        setReviews(res.data.reviews || []);
+        setReviews(res.data.reviews || []); // This assumes reviews are populated already
+        console.log(res.data.reviews);
       } catch (error) {
         console.error("Error getting movie data", error);
       }
     };
     fetchMovieData();
-  }, [getOneMovie, id, submittingReview]);
+  }, [getOneMovie, id]);
 
+  // Handle new review submission
   const handleNewReview = (newReview) => {
-    setReviews([...reviews, newReview]);
-    setSubmittingReview(true);
+    setReviews((prevReviews) => [...prevReviews, newReview]); // Append new review
   };
 
   const handleClick = () => {
     setIsShown((current) => !current);
   };
+
+  if (!movie) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-white">Loading movie details...</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -59,11 +69,10 @@ const SingleMovie = () => {
           ) : (
             <div className="flex items-center mt-4">
               <button className="flex items-center bg-gray-600 text-white px-6 py-3 rounded-md hover:bg-gray-700 transition">
-              <Link to="/login" className="ml-2 text-yellow-500 font-semibold">
-                Login to review
-              </Link>
+                <Link to="/login" className="ml-2 text-yellow-500 font-semibold">
+                  Login to review
+                </Link>
               </button>
-            
             </div>
           )}
         </div>

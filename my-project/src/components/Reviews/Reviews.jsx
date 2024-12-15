@@ -1,22 +1,36 @@
-import React from "react";
-import Review from "../Review/Review";
+import React, { useEffect, useState } from "react";
+import Review from "../Review/Review"; // Import the Review component
 
 const Reviews = ({ reviews }) => {
-  if (!reviews || !Array.isArray(reviews)) {
-    return <p className="text-white">No reviews available</p>;
-  }
+  const [fullReviews, setFullReviews] = useState([]); // Store full review data
 
+  useEffect(() => {
+    const fetchReviews = async () => {
+      // Here you will fetch the full reviews by their IDs
+      try {
+        const fetchedReviews = await Promise.all(
+          reviews.map(async (reviewId) => {
+            const response = await fetch(`http://localhost:5000/api/reviews/review/${reviewId}`); // Adjust the API endpoint as needed
+            return response.json();
+          })
+        );
+        setFullReviews(fetchedReviews); // Set full reviews once fetched
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      }
+    };
+
+    if (reviews.length) {
+      fetchReviews();
+    }
+  }, [reviews]);
+  console.log(fullReviews);
   return (
-    <div className="p-6 bg-black min-h-screen">
-      {reviews.length > 0 ? (
-        <div className="space-y-4">
-          {reviews.map((review) => (
-            <Review key={review._id} review={review} />
-          ))}
-        </div>
-      ) : (
-        <p className="text-white">No reviews</p>
-      )}
+    <div className="reviews-container">
+      {fullReviews.map((review) => (
+        
+        <Review key={review._id} review={review} />
+      ))}
     </div>
   );
 };

@@ -36,7 +36,12 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  reviews: [reviewSchema],  // Array of review subdocuments
+  reviews: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Review",
+    },
+  ],  // Array of review subdocuments
 });
 
 // Optionally, you can add a method to calculate the average rating from reviews

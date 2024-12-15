@@ -41,8 +41,7 @@ const Footer = () => {
         </ul>
         <div className="border-t border-yellow-700 pt-4">
           <p className="text-yellow-400">
-            copyright &copy;2023 <a href="https://github.com/soham-basak" className="text-yellow-500 hover:text-yellow-300">Dexter</a>
-          </p>
+            copyright &copy;2024 </p>
         </div>
       </div>
     </div>

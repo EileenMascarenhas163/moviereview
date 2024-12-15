@@ -1,9 +1,8 @@
-import express from 'express';
-import { createReview } from '../controllers/reviewController.js';
-
+import express from "express";
 const router = express.Router();
+import {createReview, getReviewsForMovie, getReviewById} from "../controllers/reviewController.js";
 
-// Route to add a review for a specific movie
-router.post('/:movieId/review', createReview);
-
+router.post("/review/:id", createReview);
+router.get("/reviews/:id", getReviewsForMovie);
+router.get("/review/:id", getReviewById);
 export default router;

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Review from "./reviewModel.js"; // Ensure Review is imported if you reference it
 
 const reviewSchema = new mongoose.Schema({
   user: {
@@ -28,9 +29,9 @@ const movieSchema = new mongoose.Schema({
   },
   rating: {
     type: Number,
-    required: true,
+    default: 0,  // Start with 0 or a default value
     min: 1,
-    max: 10, // The movie's rating could be a computed average of reviews or set manually
+    max: 10,
   },
   image_url: {
     type: String,
@@ -41,18 +42,33 @@ const movieSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "Review",
     },
-  ],  // Array of review subdocuments
+  ],
 });
 
-// Optionally, you can add a method to calculate the average rating from reviews
-movieSchema.methods.calculateAverageRating = function() {
+// Method to calculate average rating
+movieSchema.methods.calculateAverageRating = async function () {
   if (this.reviews.length === 0) {
-    return 0;
+    this.rating = 0;
+    await this.save(); // Save movie with updated rating if no reviews
+    return;
   }
-  const totalRating = this.reviews.reduce((sum, review) => sum + review.rating, 0);
-  return totalRating / this.reviews.length;
+
+  const totalRating = await Review.aggregate([
+    { $match: { _id: { $in: this.reviews } } },
+    { $group: { _id: null, avgRating: { $avg: "$rating" } } },
+  ]);
+
+  // If there's no totalRating, just set it to 0
+  const avgRating = totalRating[0] ? totalRating[0].avgRating : 0;
+  this.rating = avgRating;
+  await this.save(); // Save movie with updated average rating
 };
 
-const Movie = mongoose.model("Movie", movieSchema);
+// Middleware to automatically update the average rating after adding a review
+movieSchema.post('save', function (doc) {
+  // Recalculate average rating after saving the review
+  doc.calculateAverageRating();
+});
 
+const Movie = mongoose.model("Movie", movieSchema);
 export default Movie;
